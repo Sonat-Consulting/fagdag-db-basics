@@ -1,16 +1,9 @@
-version: "3.9"  # optional since v1.27.0
+version: "3.9" # optional since v1.27.0
 services:
   fagdag-pg:
-    image: postgres:latest
+    build: .
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=test
       - POSTGRES_USER=test
-  fagdag-sqlserver:
-    image: "mcr.microsoft.com/azure-sql-edge"
-    ports:
-      - "1433:1433"
-    environment:
-      SA_PASSWORD: "MsqlFagdag9000"
-      ACCEPT_EULA: "Y"
