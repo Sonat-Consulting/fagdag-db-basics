@@ -4,7 +4,7 @@ Iskrembutikk
 ![Ice cream sellers](pizza-tycoon.jpg)
 
 ### Skrote butikken
-Om vi må skrote butikken kjapt så er ```docker-compose up -d --force-recreate -V``` vår venn.
+Om vi må skrote butikken kjapt og starte på nytt så er ```docker-compose up -d --force-recreate -V``` vår venn.
 
 ### Opprette tabeller
 Tabeller som trengs lages ved å kjøre ```tables.sql```
