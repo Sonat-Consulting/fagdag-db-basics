@@ -1,7 +1,6 @@
 FROM postgres:latest
 
-RUN apt-get update
-RUN apt-get install wget -y
+RUN apt-get update && apt-get install wget -y
 
 WORKDIR /tmp
 COPY dbfiles/random_names.txt /tmp/
