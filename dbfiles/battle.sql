@@ -4,23 +4,25 @@ create or replace procedure usp_Battle1()
 LANGUAGE plpgsql
 AS $$
     BEGIN
-        RAISE NOTICE '---------- Steg 1 -----------' ;
-        RAISE NOTICE '-- Uønskede Nullverdier -----';
-        RAISE NOTICE 'Future-Christian: Hallo';
-        RAISE NOTICE 'Future-Christian: Jeg prøver å legge til en ny person.';
-        RAISE NOTICE 'Jeg vet ikke hva etternavn han har.  Det gjør sikkert ikke noe at det er blankt..';
+        RAISE NOTICE '---------- Step 1 -----------' ;
+        RAISE NOTICE '-- Unwanted null values -----';
+        RAISE NOTICE 'Future-Christian: Hello!';
+        RAISE NOTICE 'Future-Christian: I am trying to add a new person to the person table.';
+        RAISE NOTICE 'I do not know his last name.  I assume it doesnt matter.';
         RAISE NOTICE ' ';
+        RAISE NOTICE 'Narrator: It does.';
+
         BEGIN
             INSERT INTO person values(3250003, 123456789101112, 4000, 'F',   'Martin',  Null);
         EXCEPTION
             WHEN OTHERS THEN
-                RAISE NOTICE 'Future-Christian: Hmmm.. Det gikk ikke.';
-                RAISE NOTICE 'Narrator: Future-Christian lykkes ikke med å fylle databasen med navneløse. Steg fullført';
+                RAISE NOTICE 'Future-Christian: Hmmm.. That did not work.';
+                RAISE NOTICE 'Narrator: Future-Christian fails to fill the database with nameless people.  Step completed.';
                 INSERT INTO game_state values (1);
                 RETURN;
          END;
 
-        RAISE NOTICE 'Narrator: Future-Christian lykkes med å fylle basen med navneløse.   Prøv å hindre dette.';
+        RAISE NOTICE 'Narrator: Future-Christian succeeds in filling the database with nameless people.   Try to stop him.';
         ROLLBACK;
 
     end$$;
@@ -30,26 +32,28 @@ create or replace procedure usp_Battle2()
 LANGUAGE plpgsql
 AS $$
     BEGIN
-        RAISE NOTICE '---------- Steg 1 -----------' ;
+        RAISE NOTICE '---------- Step 2 -----------' ;
+        RAISE NOTICE '-- Missing foreign key  -----';
 
-        RAISE NOTICE 'Future-Christian: Jeg har tenkt å legge til Byen min "Slopergrad" ';
-        RAISE NOTICE 'Future-Christian: Jeg har ikke noe landkode for den, så jeg legger inn XXX';
-        RAISE NOTICE 'Narrator:  Dette er problematisk, vi har rapporter som er avhengig av å kunne koble by og land';
+        RAISE NOTICE 'Future-Christian: I was thinking to add my city, "Slopergrad". ';
+        RAISE NOTICE 'Future-Christian: I do not have a country code for it, so I will add XXX for that';
+        RAISE NOTICE ' ';
+        RAISE NOTICE 'Narrator:  This is problematic.  We have reports that depend on joining city and country.';
 
         BEGIN
             INSERT INTO city values (9999,'Slopergrad','XXX','District9',1);
         EXCEPTION
             WHEN OTHERS THEN
-                RAISE NOTICE 'Future-Christian: Uff.. Det gikk ikke heller.';
-                RAISE NOTICE 'Narrator: Future-Christian må finne landkoden for å legge inn byer. Basen forblir konsistent.';
-                RAISE NOTICE 'Steg fullført.';
+                RAISE NOTICE 'Future-Christian: Uff.. That was not possible either.';
+                RAISE NOTICE 'Narrator: Future-Christian must now find country codes to add his cities. The base remains consistent.';
+                RAISE NOTICE 'Step completed.';
                 INSERT INTO game_state values (2);
                 RETURN;
         END;
 
-        RAISE NOTICE 'Narrator: Future-Christian lykkes med å legge inn byer uten land.';
-        RAISE NOTICE 'Dette blir problematisk når man f.eks. skal sammenligne befolkningstall/land vs. befolkningstall totalt.';
-        RAISE NOTICE 'Prøv å legge inn et krav om at alle byer skal være i et land  hindre dette.';
+        RAISE NOTICE 'Narrator: Future-Christian succeeds adding cities with no countries.';
+        RAISE NOTICE 'This is problematic when we compare population/country vs. total population.';
+        RAISE NOTICE 'Try to add a requirement that all cities has to be in a country.';
         ROLLBACK;
 
 
@@ -61,10 +65,30 @@ create or replace procedure usp_Battle3()
 LANGUAGE plpgsql
 AS $$
     BEGIN
-        RAISE NOTICE 'Not implemented';
-        INSERT INTO game_state values (3);
 
+        RAISE NOTICE '---------Step 3----------------';
+        RAISE NOTICE '--- Duplicate logical key -----';
+        RAISE NOTICE 'Future-Christian: I am adding a new password.  I am not sure i remember his world_sec_nr. Maybe i made a mistake here.';
+        RAISE NOTICE ' ';
+        RAISE NOTICE 'Narrator: If he uses the world_sec_nr of an existing person we will have big problems when the back-end queries us!';
+        BEGIN
+            INSERT INTO person values(3250001, 8983027730798, 4000, 'M',   'Martin',  'Sloper');
+            RAISE NOTICE 'Narrator: Future-Christian adds a new user, but he uses an existing world_sec_nr. This should have been a logical key. Nrgh!';
+        EXCEPTION
+                WHEN OTHERS THEN
+                    RAISE NOTICE 'Future-Christian: Ack... That did not work either.';
+                    RAISE NOTICE ' ';
+                    RAISE NOTICE 'Narrator: Future-Christian has been stopped and we can still answer the backend when it queries us.';
+                    RAISE NOTICE 'Step completed.';
+                    INSERT INTO game_state values (3);
+                RETURN;
+        END;
+        RAISE NOTICE 'Narrator:  Future-Christian succeeds.  We can no longer uniquely identify a person when the back end queries us.  We are in deep dodo.';
+        RAISE NOTICE 'Narrator:  Do something!';
+
+        ROLLBACK;
     end$$;
+
 
 create or replace procedure usp_Battle4()
 LANGUAGE plpgsql
@@ -89,9 +113,9 @@ AS $$
             when 2 THEN call usp_Battle3(); -- inserting logical duplicate
             when 3 THEN call usp_Battle4(); -- constraint value
             else
-                RAISE Notice 'Du har fullført spillet.  Du har ryddet opp etter Past-Christian og stoppet Future-Christian. ';
-                RAISE Notice 'Basen er blitt et tryggere sted!';
-                RAISE Notice 'Gratulerer!';
+                RAISE Notice 'You have completed the game.  You have cleaned up after Past-Christian and have stopped Future-Christian (for now). ';
+                RAISE Notice 'The base is now a safer place.';
+                RAISE Notice 'Congratulations!';
         end case;
 
     end$$;
