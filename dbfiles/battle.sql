@@ -94,9 +94,28 @@ create or replace procedure usp_Battle4()
 LANGUAGE plpgsql
 AS $$
     BEGIN
-        RAISE NOTICE 'Not implemented';
-        INSERT INTO game_state values (4);
+        RAISE NOTICE '---------Step 4----------------';
+        RAISE NOTICE '--- Constrain value -----';
+        RAISE NOTICE 'Future-Christian: It is a little know fact that the percentage of people in Norway speaking Norwegian has reached 104.3.  I am updating the database to reflect this.';
+        RAISE NOTICE ' ';
+        RAISE NOTICE 'Narrator: Oh no!  Even his math skills are affected.  The percentage should never be above 100%%, obviously.';
+        BEGIN
+            update countrylanguage set percentage = 104.3 where countrycode = 'NOR' and language = 'Norwegian';
+        EXCEPTION
+                WHEN OTHERS THEN
+                    RAISE NOTICE 'Future-Christian: Ack... That did not work either.';
+                    RAISE NOTICE ' ';
+                    RAISE NOTICE 'Narrator: Future-Christian has been stopped (again), percentage has been limited.';
+                    RAISE NOTICE 'Step completed.';
+                    INSERT INTO game_state values (4);
+                RETURN;
+        END;
+        RAISE NOTICE 'Narrator:  Future-Christian updates the percentage of Norwegian speakers to 104.3%%. *facepalm*  Cannot trust this guy to do anything right';
+        RAISE NOTICE 'Narrator:  Future-Christian succeeds.  Norwegian is at an all time high in Norway. Is it possible to constrain this value somehow?';
+        RAISE NOTICE 'Narrator:  Please help us!';
+        RAISE NOTICE 'Narrator:  Note that Jetbrains IDE do not show checks, but postgres supports it. Look up "Add constraint check"';
 
+        ROLLBACK ;
     end$$;
 
 create or replace procedure usp_Battle()
