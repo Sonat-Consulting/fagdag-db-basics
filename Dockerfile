@@ -3,7 +3,7 @@ FROM postgres:latest
 RUN apt-get update && apt-get install wget -y
 
 WORKDIR /tmp
-COPY dbfiles/random_names.txt /tmp/
+COPY dbfiles/ /tmp/
 
 ARG DATASETS=world
 ARG PG_USER=postgres
@@ -22,8 +22,8 @@ RUN wget -qO- https://ftp.postgresql.org/pub/projects/pgFoundry/dbsamples/world/
 RUN echo "CREATE DATABASE world;" >> "/docker-entrypoint-initdb.d/world.sql" 
 RUN bash -c 'echo "\c world;" >> "/docker-entrypoint-initdb.d/world.sql"'
 RUN cat dbsamples-0.1/world/world.sql >> "/docker-entrypoint-initdb.d/world.sql";
-RUN cat random_names.txt >> "/docker-entrypoint-initdb.d/world.sql";
-
+RUN cat extend_database.sql >> "/docker-entrypoint-initdb.d/world.sql";
+RUN cat battle.sql >> "/docker-entrypoint-initdb.d/world.sql";
 
 USER $PG_USER
 WORKDIR $PG_HOME
