@@ -68,12 +68,12 @@ AS $$
 
         RAISE NOTICE '---------Step 3----------------';
         RAISE NOTICE '--- Duplicate logical key -----';
-        RAISE NOTICE 'Future-Christian: I am adding a new password.  I am not sure i remember his world_sec_nr. Maybe i made a mistake here.';
+        RAISE NOTICE 'Future-Christian: I am adding a new person.  I am not sure I remember his world_sec_nr. Maybe I made a mistake here.';
         RAISE NOTICE ' ';
         RAISE NOTICE 'Narrator: If he uses the world_sec_nr of an existing person we will have big problems when the back-end queries us!';
         BEGIN
             INSERT INTO person values(3250001, 8983027730798, 4000, 'M',   'Martin',  'Sloper');
-            RAISE NOTICE 'Narrator: Future-Christian adds a new user, but he uses an existing world_sec_nr. This should have been a logical key. Nrgh!';
+            RAISE NOTICE 'Narrator: Future-Christian adds a new person, but he uses an existing world_sec_nr. This should have been a logical key. Nrgh!';
         EXCEPTION
                 WHEN OTHERS THEN
                     RAISE NOTICE 'Future-Christian: Ack... That did not work either.';
