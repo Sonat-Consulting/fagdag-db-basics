@@ -1,8 +1,6 @@
 Iskrembutikk
 -----------------
 
-![Ice cream sellers](pizza-tycoon.jpg)
-
 ### Skrote butikken
 Om vi må skrote butikken kjapt og starte på nytt så er ```docker-compose up -d --force-recreate -V``` vår venn.
 
